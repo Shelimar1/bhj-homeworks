@@ -1,24 +1,23 @@
-const blurb = document.querySelectorAll('span.rotator > .rotator__case');
-let textColor = blurb[0].getAttribute('data-color'); 
-blurb[0].setAttribute('style', "color: " + textColor);
-let flag = true;
+const rotators = [...document.querySelectorAll('.rotator')];
 
-function blurbToggle() {
-    if (flag) {
-        flag = false;
-        let element;
-        const currentTextBlock = document.querySelector('.rotator__case_active');
-        let nextTextBlock = currentTextBlock.nextElementSibling;
-        nextTextBlock ? element = nextTextBlock : element = blurb[0];
-        timeOut = element.getAttribute('data-speed');    
-        currentTextBlock.classList.remove('rotator__case_active');
-        textColor = element.getAttribute('data-color');
-        element.classList.add('rotator__case_active');
-        element.setAttribute('style', "color: " + textColor);
-        const delayResponse = setTimeout(() => {
-            flag = true;
-        }, timeOut);
+rotators.forEach((el) => {
+  const childrenElements = [...el.children];
+  changeBlock(childrenElements);
+});
+
+function changeBlock(children) {
+  const elements = children;
+  let counter = 0;
+  setInterval(() => {
+    elements.forEach((el) => el.classList.remove('rotator__case_active'));
+    if (counter < elements.length - 1) {
+      elements[counter + 1].style.color = elements[counter + 1].dataset.color;
+      elements[counter + 1].classList.add('rotator__case_active');
+      counter += 1;
+    } else {
+      elements[0].style.color = elements[0].dataset.color;
+      elements[0].classList.add('rotator__case_active');
+      counter = 0;
     }
+  }, 1000);
 }
-
-const timer1 = setInterval(() => blurbToggle(), 1);
